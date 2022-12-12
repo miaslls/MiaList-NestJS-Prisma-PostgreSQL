@@ -14,7 +14,13 @@ async function bootstrap() {
     .setDescription('list management app')
     .setVersion('3.0.0')
     .addTag('status')
+    .addTag('auth')
+    .addTag('home')
     .addTag('user')
+    .addTag('category')
+    .addTag('tag')
+    .addTag('list')
+    .addTag('entry')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
