@@ -14,7 +14,7 @@ export class UserDto {
   @IsString()
   passwordConfirm: string;
 
-  @ApiProperty({ description: 'role', examples: ['ADMIN', 'USER', 'INACTIVE'] })
+  @ApiProperty({ description: 'role', examples: ['ADMIN', 'USER'] })
   @IsString()
   role: string;
 }
