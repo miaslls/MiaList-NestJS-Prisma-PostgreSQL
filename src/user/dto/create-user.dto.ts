@@ -14,7 +14,7 @@ export class UserDto {
   @IsString()
   passwordConfirm: string;
 
-  @ApiProperty({ description: 'admin?', default: false, type: 'boolean' })
+  @ApiProperty({ description: 'admin?', type: 'boolean' })
   @IsBoolean()
   isAdmin: boolean;
 }
