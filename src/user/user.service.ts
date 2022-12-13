@@ -20,7 +20,9 @@ export class UserService {
     if ('role' in dto) throw new Exception(ExceptionType.FORBIDDEN);
 
     const duplicateUsername = await this.userRepository.findOne(dto.username);
-    if (duplicateUsername) throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE USERNAME');
+    if (duplicateUsername) {
+      throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE USERNAME');
+    }
 
     if (dto.password.length < 8) throw new Exception(ExceptionType.DATA_INVALID, 'PASSWORD TOO SHORT');
     if (dto.password !== dto.passwordConfirm) throw new Exception(ExceptionType.DATA_INVALID, "PASSWORDS DON'T MATCH");
@@ -53,7 +55,9 @@ export class UserService {
     }
 
     const user = await this.userRepository.findOne(username);
-    if (!user) throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'USER NOT FOUND');
+    if (!user) {
+      throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'USER NOT FOUND');
+    }
 
     delete user.password;
     return user;
@@ -69,11 +73,15 @@ export class UserService {
     }
 
     const userInDb = await this.userRepository.findOne(username);
-    if (!userInDb) throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'USER NOT FOUND');
+    if (!userInDb) {
+      throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'USER NOT FOUND');
+    }
 
     if ('username' in dto && dto.username !== username) {
       const duplicateUsername = await this.userRepository.findOne(dto.username);
-      if (duplicateUsername) throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE USERNAME');
+      if (duplicateUsername) {
+        throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE USERNAME');
+      }
     }
 
     const data = { ...dto };

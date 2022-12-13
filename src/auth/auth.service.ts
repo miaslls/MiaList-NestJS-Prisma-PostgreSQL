@@ -16,10 +16,14 @@ export class AuthService {
 
   async login({ username, password }: LoginDto): Promise<LoginResponseDto> {
     const user = await this.authRepository.findUser(username);
-    if (!user) throw new Exception(ExceptionType.DATA_INVALID, 'LOGIN INFO INVALID');
+    if (!user) {
+      throw new Exception(ExceptionType.DATA_INVALID, 'LOGIN INFO INVALID');
+    }
 
     const validHash = await bcrypt.compare(password, user.password);
-    if (!validHash) throw new Exception(ExceptionType.DATA_INVALID, 'LOGIN INFO INVALID');
+    if (!validHash) {
+      throw new Exception(ExceptionType.DATA_INVALID, 'LOGIN INFO INVALID');
+    }
 
     delete user.password;
 
