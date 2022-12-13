@@ -17,6 +17,8 @@ export class UserService {
   // 📌 CREATE
 
   async create(dto: UserDto): Promise<User> {
+    if ('role' in dto) throw new Exception(ExceptionType.FORBIDDEN);
+
     const duplicateUsername = await this.userRepository.findOne(dto.username);
     if (duplicateUsername) throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE USERNAME');
 
@@ -36,14 +38,20 @@ export class UserService {
 
   // 📌 READ
 
-  async findAll(): Promise<User[]> {
+  async findAll(role: string): Promise<User[]> {
+    if (role !== 'admin') throw new Exception(ExceptionType.FORBIDDEN);
+
     const users = await this.userRepository.findAll();
 
     users.forEach((user) => delete user.password);
     return users;
   }
 
-  async findOne(username: string): Promise<User> {
+  async findOne(loggedUser: User, username: string): Promise<User> {
+    if (loggedUser.role !== 'admin' && loggedUser.username !== username) {
+      throw new Exception(ExceptionType.FORBIDDEN);
+    }
+
     const user = await this.userRepository.findOne(username);
     if (!user) throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'USER NOT FOUND');
 
@@ -53,7 +61,13 @@ export class UserService {
 
   // 📌 UPDATE
 
-  async update(username: string, dto: PartialUserDto): Promise<User> {
+  async update(loggedUser: User, username: string, dto: PartialUserDto): Promise<User> {
+    if (loggedUser.role !== 'admin') {
+      if (loggedUser.username !== username || 'role' in dto) {
+        throw new Exception(ExceptionType.FORBIDDEN);
+      }
+    }
+
     const userInDb = await this.userRepository.findOne(username);
     if (!userInDb) throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'USER NOT FOUND');
 
@@ -85,9 +99,12 @@ export class UserService {
 
   // 📌 DELETE
 
-  async remove(username: string): Promise<User> {
-    await this.findOne(username);
+  async remove(loggedUser: User, username: string): Promise<User> {
+    if (loggedUser.role !== 'admin' && loggedUser.username !== username) {
+      throw new Exception(ExceptionType.FORBIDDEN);
+    }
 
+    await this.findOne(loggedUser, username);
     const user = await this.userRepository.remove(username);
 
     delete user.password;

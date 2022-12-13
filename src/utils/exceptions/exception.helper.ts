@@ -26,6 +26,6 @@ export function HandleException({ exception, message }: IException) {
     case ExceptionType.UNAUTHORIZED:
       throw new UnauthorizedException(message ? message : 'UNAUTHORIZED');
     case ExceptionType.FORBIDDEN:
-      throw new ForbiddenException(message ? message : 'FORBIDDEN');
+      throw new ForbiddenException(message ? message : 'INSUFFICIENT PRIVILEGES');
   }
 }
