@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class UserDto {
   @ApiProperty({ description: 'username', example: 'janedoe' })
@@ -14,7 +14,7 @@ export class UserDto {
   @IsString()
   passwordConfirm: string;
 
-  @ApiProperty({ description: 'admin?', type: 'boolean' })
-  @IsBoolean()
-  isAdmin: boolean;
+  @ApiProperty({ description: 'role', examples: ['ADMIN', 'USER', 'INACTIVE'] })
+  @IsString()
+  role: string;
 }

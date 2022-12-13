@@ -11,7 +11,7 @@ model User {
   id         String     @id @default(auto()) @map("_id") @db.ObjectId
   username   String     @unique
   password   String
-  isAdmin    Boolean    @map("is_admin")
+  role       String
   categories Category[]
   tags       Tag[]
   lists      List[]
