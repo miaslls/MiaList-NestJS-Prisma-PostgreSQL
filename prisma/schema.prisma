@@ -11,7 +11,7 @@ model User {
   id         String     @id @default(auto()) @map("_id") @db.ObjectId
   username   String     @unique
   password   String
-  isAdmin    Boolean    @default(false) @map("is_admin")
+  isAdmin    Boolean    @map("is_admin")
   categories Category[]
   tags       Tag[]
   lists      List[]
@@ -46,8 +46,8 @@ model List {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   icon        String
-  pinned      Boolean  @default(false)
-  isChecklist Boolean  @default(true) @map("is_checklist")
+  pinned      Boolean
+  isChecklist Boolean  @map("is_checklist")
   createdAt   DateTime @map("created_at")
   entries     Entry[]
 
@@ -64,7 +64,7 @@ model List {
 model Entry {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   text      String
-  starred   Boolean  @default(false)
+  starred   Boolean
   createdAt DateTime @map("created_at")
 
   completed Boolean?
