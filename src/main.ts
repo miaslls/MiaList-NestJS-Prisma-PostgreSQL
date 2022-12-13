@@ -16,11 +16,11 @@ async function bootstrap() {
     .addTag('status')
     .addTag('auth')
     .addTag('home')
-    .addTag('user')
-    .addTag('category')
-    .addTag('tag')
-    .addTag('list')
-    .addTag('entry')
+    .addTag('users')
+    .addTag('categories')
+    .addTag('tags')
+    .addTag('lists')
+    .addTag('entries')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
