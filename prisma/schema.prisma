@@ -8,11 +8,10 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  username String   @unique
-  password String
-  role     UserRole @default(USER)
-
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  username   String     @unique
+  password   String
+  isAdmin    Boolean    @default(false) @map("is_admin")
   categories Category[]
   tags       Tag[]
   lists      List[]
@@ -21,12 +20,11 @@ model User {
 }
 
 model Category {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
   lists List[]
 
-  User   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 
   @@map("category")
@@ -36,29 +34,28 @@ model Tag {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String
 
-  lists List[]
-
-  User   User   @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
+  lists   List[]   @relation(fields: [listIDs], references: [id])
+  listIDs String[] @db.ObjectId
+  user    User     @relation(fields: [userId], references: [id])
+  userId  String   @db.ObjectId
 
   @@map("tag")
 }
 
 model List {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  icon      String
-  type      ListType @default(CHECK)
-  pinned    Boolean  @default(false)
-  createdAt DateTime @map("created_at")
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  icon        String
+  pinned      Boolean  @default(false)
+  isChecklist Boolean  @default(true) @map("is_checklist")
+  createdAt   DateTime @map("created_at")
+  entries     Entry[]
 
-  entries Entry[]
-
-  Category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
   categoryId String   @db.ObjectId
-  Tag        Tag?     @relation(fields: [tagId], references: [id])
-  tagId      String?  @db.ObjectId
-  User       User     @relation(fields: [userId], references: [id])
+  tags       Tag[]    @relation(fields: [tagIDs], references: [id])
+  tagIDs     String[] @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id])
   userId     String   @db.ObjectId
 
   @@map("list")
@@ -79,14 +76,4 @@ model Entry {
   listId String? @db.ObjectId
 
   @@map("entry")
-}
-
-enum UserRole {
-  ADMIN
-  USER
-}
-
-enum ListType {
-  BULLET
-  CHECK
 }
