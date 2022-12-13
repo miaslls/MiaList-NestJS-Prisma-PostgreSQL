@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 import { UserService } from './user.service';
 import { HandleException } from 'src/utils/exceptions/exception.helper';
@@ -25,6 +26,8 @@ export class UserController {
 
   @Get()
   @ApiOperation({ summary: 'get all users' })
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   async findAll(): Promise<User[]> {
     try {
       return await this.userService.findAll();
@@ -35,6 +38,8 @@ export class UserController {
 
   @Get(':username')
   @ApiOperation({ summary: 'get user' })
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   async findOne(@Param('username') username: string): Promise<User> {
     try {
       return await this.userService.findOne(username);
@@ -45,6 +50,8 @@ export class UserController {
 
   @Patch(':username')
   @ApiOperation({ summary: 'update user' })
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   async update(@Param('username') username: string, @Body() dto: PartialUserDto): Promise<User> {
     try {
       return await this.userService.update(username, dto);
@@ -55,6 +62,8 @@ export class UserController {
 
   @Delete(':username')
   @ApiOperation({ summary: 'remove user' })
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   async remove(@Param('username') username: string) {
     try {
       return await this.userService.remove(username);
