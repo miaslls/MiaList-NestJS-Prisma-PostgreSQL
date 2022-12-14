@@ -5,8 +5,4 @@ export class CategoryDto {
   @ApiProperty({ description: 'category name', example: 'work' })
   @IsString()
   name: string;
-
-  @ApiProperty({ description: 'userId' })
-  @IsString()
-  userId: string;
 }
