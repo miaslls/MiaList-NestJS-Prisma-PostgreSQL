@@ -40,8 +40,7 @@ export class UserRepository {
 
   async update(username: string, data: Prisma.UserUpdateInput): Promise<User> {
     try {
-      const user = this.prisma.user.update({ where: { username }, data });
-      return user;
+      return this.prisma.user.update({ where: { username }, data });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
