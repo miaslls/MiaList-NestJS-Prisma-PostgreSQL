@@ -30,9 +30,7 @@ export class UserRepository {
 
   async findOne(username: string): Promise<User> {
     try {
-      return this.prisma.user.findUnique({
-        where: { username },
-      });
+      return this.prisma.user.findUnique({ where: { username } });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
