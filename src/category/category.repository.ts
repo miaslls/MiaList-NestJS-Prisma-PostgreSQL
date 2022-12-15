@@ -30,15 +30,13 @@ export class CategoryRepository {
 
   async findOne(id: string): Promise<Category> {
     try {
-      return this.prisma.category.findUnique({
-        where: { id },
-      });
+      return this.prisma.category.findUnique({ where: { id } });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
   }
 
-  async findOneByName(userId: string, name: string) {
+  async findOneByName(userId: string, name: string): Promise<Category> {
     try {
       return this.prisma.category.findFirst({
         where: { userId, name },
