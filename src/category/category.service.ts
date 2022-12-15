@@ -4,6 +4,7 @@ import { CategoryRepository } from './category.repository';
 
 import { Exception } from 'src/utils/exceptions/Exception';
 import { ExceptionType } from 'src/utils/exceptions/exception.helper';
+import { validObjectId } from 'src/utils/validation/object-id';
 
 import { Category } from './entities/category.entity';
 import { CategoryDto } from './dto/create-category.dto';
@@ -32,6 +33,8 @@ export class CategoryService {
   }
 
   async findOne(id: string): Promise<Category> {
+    if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
+
     const category = await this.categoryRepository.findOne(id);
     if (!category) {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'CATEGORY NOT FOUND');
@@ -43,6 +46,8 @@ export class CategoryService {
   // 📌 UPDATE
 
   async update(userId: string, id: string, dto: CategoryUpdateDto): Promise<Category> {
+    if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
+
     const category = await this.categoryRepository.findOne(id);
     if (!category) {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'CATEGORY NOT FOUND');
@@ -61,6 +66,8 @@ export class CategoryService {
   // 📌 DELETE
 
   async remove(id: string): Promise<Category> {
+    if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
+
     await this.findOne(id);
     return await this.categoryRepository.remove(id);
   }
