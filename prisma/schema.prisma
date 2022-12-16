@@ -25,7 +25,7 @@ model Category {
   name String
 
   lists  List[]
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id") @db.ObjectId
 
   @@map("category")
@@ -37,7 +37,7 @@ model Tag {
 
   lists   List[]   @relation(fields: [listIds], references: [id])
   listIds String[] @map("list_ids") @db.ObjectId
-  user    User     @relation(fields: [userId], references: [id])
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String   @map("user_id") @db.ObjectId
 
   @@map("tag")
@@ -56,7 +56,7 @@ model List {
   categoryId String   @map("category_id") @db.ObjectId
   tags       Tag[]    @relation(fields: [tagIds], references: [id])
   tagIds     String[] @map("tag_ids") @db.ObjectId
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String   @map("user_id") @db.ObjectId
 
   @@map("list")
@@ -73,7 +73,7 @@ model Entry {
   amount    Float?
   hyperlink String?
 
-  List   List?   @relation(fields: [listId], references: [id])
+  List   List?   @relation(fields: [listId], references: [id], onDelete: Cascade)
   listId String? @map("list_id") @db.ObjectId
 
   @@map("entry")
