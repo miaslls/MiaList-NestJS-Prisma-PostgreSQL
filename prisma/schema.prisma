@@ -52,12 +52,12 @@ model List {
   createdAt   DateTime @map("created_at")
 
   entries    Entry[]
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String   @map("category_id") @db.ObjectId
-  tags       Tag[]    @relation(fields: [tagIds], references: [id])
-  tagIds     String[] @map("tag_ids") @db.ObjectId
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String   @map("user_id") @db.ObjectId
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId String?   @map("category_id") @db.ObjectId
+  tags       Tag[]     @relation(fields: [tagIds], references: [id])
+  tagIds     String[]  @map("tag_ids") @db.ObjectId
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String    @map("user_id") @db.ObjectId
 
   @@map("list")
 }
