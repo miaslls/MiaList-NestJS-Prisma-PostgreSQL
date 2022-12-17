@@ -7,7 +7,7 @@ import { HandleException } from 'src/utils/exceptions/exception.helper';
 
 import { List } from './entities/list.entity';
 import { ListDto } from './dto/create-list.dto';
-import { ListUpdateDto } from './dto/update-list.dto';
+import { PartialListDto } from './dto/update-list.dto';
 
 import { User } from 'src/user/entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
@@ -51,7 +51,7 @@ export class ListController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'update list' })
-  async update(@LoggedUser() loggedUser: User, @Param('id') id: string, @Body() dto: ListUpdateDto): Promise<List> {
+  async update(@LoggedUser() loggedUser: User, @Param('id') id: string, @Body() dto: PartialListDto): Promise<List> {
     try {
       return await this.listService.update(loggedUser.id, id, dto);
     } catch (err) {

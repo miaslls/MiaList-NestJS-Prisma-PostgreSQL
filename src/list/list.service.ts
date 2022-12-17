@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 import { ListRepository } from './list.repository';
 
@@ -8,7 +9,7 @@ import { validObjectId } from 'src/utils/validation/object-id';
 
 import { List } from './entities/list.entity';
 import { ListDto } from './dto/create-list.dto';
-import { ListUpdateDto } from './dto/update-list.dto';
+import { PartialListDto } from './dto/update-list.dto';
 
 @Injectable()
 export class ListService {
@@ -22,7 +23,13 @@ export class ListService {
       throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE LIST');
     }
 
-    const data = { ...dto, userId, createdAt: new Date() };
+    const data: Prisma.ListUncheckedCreateInput = {
+      ...dto,
+      userId,
+      createdAt: new Date(),
+      tags: { connect: dto.tagIds.map((tagId) => ({ id: tagId })) },
+    };
+
     return await this.listRepository.create(data);
   }
 
@@ -45,15 +52,21 @@ export class ListService {
 
   // 📌 UPDATE
 
-  async update(userId: string, id: string, dto: ListUpdateDto): Promise<List> {
+  async update(userId: string, id: string, dto: PartialListDto): Promise<List> {
     await this.findOne(id);
 
-    const duplicateTitle = await this.listRepository.findOneByTitle(userId, dto.title);
-    if (duplicateTitle) {
-      throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE LIST');
+    if ('title' in dto) {
+      const duplicateTitle = await this.listRepository.findOneByTitle(userId, dto.title);
+      if (duplicateTitle) {
+        throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE LIST');
+      }
     }
 
-    const data = { ...dto };
+    const data: Prisma.ListUncheckedUpdateInput = { ...dto };
+
+    if ('tagIds' in dto) {
+      data.tags = { set: dto.tagIds.map((tagId) => ({ id: tagId })) };
+    }
 
     return await this.listRepository.update(id, data);
   }
