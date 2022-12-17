@@ -46,12 +46,7 @@ export class TagService {
   // 📌 UPDATE
 
   async update(userId: string, id: string, dto: PartialTagDto): Promise<Tag> {
-    if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
-
-    const tag = await this.tagRepository.findOne(id);
-    if (!tag) {
-      throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'TAG NOT FOUND');
-    }
+    await this.findOne(id);
 
     const duplicateName = await this.tagRepository.findOneByName(userId, dto.name);
     if (duplicateName) {
@@ -66,8 +61,6 @@ export class TagService {
   // 📌 DELETE
 
   async remove(id: string): Promise<Tag> {
-    if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
-
     await this.findOne(id);
     return await this.tagRepository.remove(id);
   }

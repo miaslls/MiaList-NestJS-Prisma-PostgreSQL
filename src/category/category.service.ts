@@ -46,12 +46,7 @@ export class CategoryService {
   // 📌 UPDATE
 
   async update(userId: string, id: string, dto: PartialCategoryDto): Promise<Category> {
-    if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
-
-    const category = await this.categoryRepository.findOne(id);
-    if (!category) {
-      throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'CATEGORY NOT FOUND');
-    }
+    await this.findOne(id);
 
     const duplicateName = await this.categoryRepository.findOneByName(userId, dto.name);
     if (duplicateName) {
@@ -66,8 +61,6 @@ export class CategoryService {
   // 📌 DELETE
 
   async remove(id: string): Promise<Category> {
-    if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
-
     await this.findOne(id);
     return await this.categoryRepository.remove(id);
   }

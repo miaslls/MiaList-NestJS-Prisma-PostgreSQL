@@ -66,16 +66,9 @@ export class UserService {
   // 📌 UPDATE
 
   async update(loggedUser: User, username: string, dto: PartialUserDto): Promise<User> {
-    if (loggedUser.role !== 'admin') {
-      if (loggedUser.username !== username || 'role' in dto) {
-        throw new Exception(ExceptionType.FORBIDDEN);
-      }
-    }
+    await this.findOne(loggedUser, username);
 
-    const userInDb = await this.userRepository.findOne(username);
-    if (!userInDb) {
-      throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'USER NOT FOUND');
-    }
+    if (loggedUser.role !== 'admin' && 'role' in dto) throw new Exception(ExceptionType.FORBIDDEN);
 
     if ('username' in dto && dto.username !== username) {
       const duplicateUsername = await this.userRepository.findOne(dto.username);
@@ -108,10 +101,6 @@ export class UserService {
   // 📌 DELETE
 
   async remove(loggedUser: User, username: string): Promise<User> {
-    if (loggedUser.role !== 'admin' && loggedUser.username !== username) {
-      throw new Exception(ExceptionType.FORBIDDEN);
-    }
-
     await this.findOne(loggedUser, username);
     const user = await this.userRepository.remove(username);
 
