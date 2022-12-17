@@ -8,9 +8,10 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
 import { TagModule } from './tag/tag.module';
+import { ListModule } from './list/list.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UserModule, CategoryModule, TagModule],
+  imports: [PrismaModule, AuthModule, UserModule, CategoryModule, TagModule, ListModule],
   controllers: [AppController],
   providers: [AppService],
 })
