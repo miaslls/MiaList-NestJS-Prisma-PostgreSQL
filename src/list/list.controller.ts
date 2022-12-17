@@ -59,6 +59,16 @@ export class ListController {
     }
   }
 
+  @Patch('pin/:id')
+  @ApiOperation({ summary: 'toggle pin list' })
+  async togglePinned(@Param('id') id: string): Promise<List> {
+    try {
+      return await this.listService.togglePinned(id);
+    } catch (err) {
+      HandleException(err);
+    }
+  }
+
   @Delete(':id')
   @ApiOperation({ summary: 'remove list' })
   async remove(@Param('id') id: string) {

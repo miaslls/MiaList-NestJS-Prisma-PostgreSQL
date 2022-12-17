@@ -58,6 +58,13 @@ export class ListService {
     return await this.listRepository.update(id, data);
   }
 
+  async togglePinned(id: string): Promise<List> {
+    const list = await this.findOne(id);
+    const data = { pinned: list.pinned ? false : true };
+
+    return await this.listRepository.update(id, data);
+  }
+
   // 📌 DELETE
 
   async remove(id: string): Promise<List> {
