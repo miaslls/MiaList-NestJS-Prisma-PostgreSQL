@@ -7,7 +7,7 @@ import { HandleException } from 'src/utils/exceptions/exception.helper';
 
 import { Tag } from './entities/tag.entity';
 import { TagDto } from './dto/create-tag.dto';
-import { TagUpdateDto } from './dto/update-tag.dto';
+import { PartialTagDto } from './dto/update-tag.dto';
 
 import { User } from 'src/user/entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
@@ -51,7 +51,7 @@ export class TagController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'update tag' })
-  async update(@LoggedUser() loggedUser: User, @Param('id') id: string, @Body() dto: TagUpdateDto): Promise<Tag> {
+  async update(@LoggedUser() loggedUser: User, @Param('id') id: string, @Body() dto: PartialTagDto): Promise<Tag> {
     try {
       return await this.tagService.update(loggedUser.id, id, dto);
     } catch (err) {

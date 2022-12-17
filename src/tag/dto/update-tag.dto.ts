@@ -1,8 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { TagDto } from './create-tag.dto';
 
-export class TagUpdateDto {
-  @ApiProperty({ description: 'tag name', example: 'shopping' })
-  @IsString()
-  name: string;
-}
+export class PartialTagDto extends PartialType(TagDto) {}

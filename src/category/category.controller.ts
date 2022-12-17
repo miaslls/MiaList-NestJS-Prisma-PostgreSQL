@@ -7,7 +7,7 @@ import { HandleException } from 'src/utils/exceptions/exception.helper';
 
 import { Category } from './entities/category.entity';
 import { CategoryDto } from './dto/create-category.dto';
-import { CategoryUpdateDto } from './dto/update-category.dto';
+import { PartialCategoryDto } from './dto/update-category.dto';
 
 import { User } from 'src/user/entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
@@ -54,7 +54,7 @@ export class CategoryController {
   async update(
     @LoggedUser() loggedUser: User,
     @Param('id') id: string,
-    @Body() dto: CategoryUpdateDto,
+    @Body() dto: PartialCategoryDto,
   ): Promise<Category> {
     try {
       return await this.categoryService.update(loggedUser.id, id, dto);

@@ -8,7 +8,7 @@ import { validObjectId } from 'src/utils/validation/object-id';
 
 import { Category } from './entities/category.entity';
 import { CategoryDto } from './dto/create-category.dto';
-import { CategoryUpdateDto } from './dto/update-category.dto';
+import { PartialCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -45,7 +45,7 @@ export class CategoryService {
 
   // 📌 UPDATE
 
-  async update(userId: string, id: string, dto: CategoryUpdateDto): Promise<Category> {
+  async update(userId: string, id: string, dto: PartialCategoryDto): Promise<Category> {
     if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
 
     const category = await this.categoryRepository.findOne(id);

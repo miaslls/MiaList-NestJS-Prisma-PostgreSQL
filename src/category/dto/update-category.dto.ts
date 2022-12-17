@@ -1,8 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { CategoryDto } from './create-category.dto';
 
-export class CategoryUpdateDto {
-  @ApiProperty({ description: 'category name', example: 'personal' })
-  @IsString()
-  name: string;
-}
+export class PartialCategoryDto extends PartialType(CategoryDto) {}

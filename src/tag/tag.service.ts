@@ -8,7 +8,7 @@ import { validObjectId } from 'src/utils/validation/object-id';
 
 import { Tag } from './entities/tag.entity';
 import { TagDto } from './dto/create-tag.dto';
-import { TagUpdateDto } from './dto/update-tag.dto';
+import { PartialTagDto } from './dto/update-tag.dto';
 
 @Injectable()
 export class TagService {
@@ -45,7 +45,7 @@ export class TagService {
 
   // 📌 UPDATE
 
-  async update(userId: string, id: string, dto: TagUpdateDto): Promise<Tag> {
+  async update(userId: string, id: string, dto: PartialTagDto): Promise<Tag> {
     if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
 
     const tag = await this.tagRepository.findOne(id);
