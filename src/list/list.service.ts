@@ -18,6 +18,16 @@ export class ListService {
   // 📌 CREATE
 
   async create(userId: string, dto: ListDto): Promise<List> {
+    if ('categoryId' in dto) {
+      if (!validObjectId(dto.categoryId)) {
+        throw new Exception(ExceptionType.DATA_INVALID, 'CATEGORY ID INVALID');
+      }
+    }
+
+    dto.tagIds.forEach((tagId) => {
+      if (!validObjectId(tagId)) throw new Exception(ExceptionType.DATA_INVALID, 'TAG ID INVALID');
+    });
+
     const duplicateName = await this.listRepository.findOneByTitle(userId, dto.title);
     if (duplicateName) {
       throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE LIST');
@@ -54,6 +64,18 @@ export class ListService {
 
   async update(userId: string, id: string, dto: PartialListDto): Promise<List> {
     await this.findOne(id);
+
+    if ('categoryId' in dto) {
+      if (!validObjectId(dto.categoryId)) {
+        throw new Exception(ExceptionType.DATA_INVALID, 'CATEGORY ID INVALID');
+      }
+    }
+
+    if ('tagIds' in dto) {
+      dto.tagIds.forEach((tagId) => {
+        if (!validObjectId(tagId)) throw new Exception(ExceptionType.DATA_INVALID, 'TAG ID INVALID');
+      });
+    }
 
     if ('title' in dto) {
       const duplicateTitle = await this.listRepository.findOneByTitle(userId, dto.title);
