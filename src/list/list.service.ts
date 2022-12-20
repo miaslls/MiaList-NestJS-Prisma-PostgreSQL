@@ -63,7 +63,7 @@ export class ListService {
   // 📌 UPDATE
 
   async update(userId: string, id: string, dto: PartialListDto): Promise<List> {
-    await this.findOne(id);
+    const list = await this.findOne(id);
 
     if ('categoryId' in dto) {
       if (!validObjectId(dto.categoryId)) {
@@ -77,7 +77,7 @@ export class ListService {
       });
     }
 
-    if ('title' in dto) {
+    if ('title' in dto && dto.title !== list.title) {
       const duplicateTitle = await this.listRepository.findOneByTitle(userId, dto.title);
       if (duplicateTitle) {
         throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE LIST');
