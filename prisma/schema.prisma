@@ -65,9 +65,9 @@ model List {
 model Entry {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   text      String
-  starred   Boolean
   createdAt DateTime @map("created_at")
 
+  starred   Boolean?  @default(false)
   completed Boolean?
   date      DateTime?
   amount    Float?
