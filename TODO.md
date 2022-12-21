@@ -1,6 +1,6 @@
 # **TODO:**
 
-- 🔳 on repositories, check data type for create/update
+- ✅ on repositories, check data type for create/update
 - 🔳 select/count
 
 ## USER
