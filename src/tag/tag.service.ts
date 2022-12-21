@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 import { TagRepository } from './tag.repository';
 
@@ -22,7 +23,7 @@ export class TagService {
       throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE TAG');
     }
 
-    const data = { ...dto, userId };
+    const data: Prisma.TagUncheckedCreateInput = { ...dto, userId };
     return await this.tagRepository.create(data);
   }
 
@@ -53,8 +54,7 @@ export class TagService {
       throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE TAG');
     }
 
-    const data = { ...dto };
-
+    const data: Prisma.TagUpdateInput = { ...dto };
     return await this.tagRepository.update(id, data);
   }
 

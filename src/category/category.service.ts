@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 import { CategoryRepository } from './category.repository';
 
@@ -22,7 +23,7 @@ export class CategoryService {
       throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE CATEGORY');
     }
 
-    const data = { ...dto, userId };
+    const data: Prisma.CategoryUncheckedCreateInput = { ...dto, userId };
     return await this.categoryRepository.create(data);
   }
 
@@ -53,8 +54,7 @@ export class CategoryService {
       throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE CATEGORY');
     }
 
-    const data = { ...dto };
-
+    const data: Prisma.CategoryUpdateInput = { ...dto };
     return await this.categoryRepository.update(id, data);
   }
 

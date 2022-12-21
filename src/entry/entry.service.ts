@@ -1,4 +1,4 @@
-import { Injectable, ParseFloatPipe } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 import { EntryRepository } from './entry.repository';
@@ -7,9 +7,9 @@ import { Exception } from 'src/utils/exceptions/Exception';
 import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 import { validObjectId } from 'src/utils/validation/object-id';
 
-import { Entry } from './entities/entry.entity';
 import { EntryDto } from './dto/create-entry.dto';
 import { PartialEntryDto } from './dto/update-entry.dto';
+import { Entry } from './entities/entry.entity';
 
 @Injectable()
 export class EntryService {
@@ -23,7 +23,7 @@ export class EntryService {
       throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE ENTRY');
     }
 
-    const data = { ...dto, createdAt: new Date() };
+    const data: Prisma.EntryUncheckedCreateInput = { ...dto, createdAt: new Date() };
     return await this.entryRepository.create(data);
   }
 

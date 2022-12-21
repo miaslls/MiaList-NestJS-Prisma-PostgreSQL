@@ -38,7 +38,7 @@ export class EntryRepository {
     }
   }
 
-  async update(id: string, data: Prisma.EntryUncheckedUpdateInput): Promise<Entry> {
+  async update(id: string, data: Prisma.EntryUpdateInput): Promise<Entry> {
     try {
       return this.prisma.entry.update({ where: { id }, data });
     } catch {

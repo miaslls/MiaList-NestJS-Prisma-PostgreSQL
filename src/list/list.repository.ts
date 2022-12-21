@@ -46,7 +46,7 @@ export class ListRepository {
     }
   }
 
-  async update(id: string, data: Prisma.ListUncheckedUpdateInput): Promise<List> {
+  async update(id: string, data: Prisma.ListUpdateInput): Promise<List> {
     try {
       return this.prisma.list.update({ where: { id }, data });
     } catch {

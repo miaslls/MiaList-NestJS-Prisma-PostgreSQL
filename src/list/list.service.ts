@@ -84,7 +84,7 @@ export class ListService {
       }
     }
 
-    const data: Prisma.ListUncheckedUpdateInput = { ...dto };
+    const data: Prisma.ListUpdateInput = { ...dto };
 
     if ('tagIds' in dto) {
       data.tags = { set: dto.tagIds.map((tagId) => ({ id: tagId })) };

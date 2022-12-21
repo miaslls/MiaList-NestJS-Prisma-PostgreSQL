@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 import { UserRepository } from './user.repository';
@@ -27,11 +28,11 @@ export class UserService {
     if (dto.password.length < 8) throw new Exception(ExceptionType.DATA_INVALID, 'PASSWORD TOO SHORT');
     if (dto.password !== dto.passwordConfirm) throw new Exception(ExceptionType.DATA_INVALID, "PASSWORDS DON'T MATCH");
 
-    const data = { ...dto };
+    delete dto.passwordConfirm;
 
-    delete data.passwordConfirm;
+    const data: Prisma.UserCreateInput = { ...dto };
+
     data.password = await bcrypt.hash(dto.password, 10);
-
     const user = await this.userRepository.create(data);
 
     delete user.password;
@@ -77,10 +78,8 @@ export class UserService {
       }
     }
 
-    const data = { ...dto };
-
-    if ('password' in data) {
-      if (data.password.length < 8) {
+    if ('password' in dto) {
+      if (dto.password.length < 8) {
         throw new Exception(ExceptionType.DATA_INVALID, 'PASSWORD TOO SHORT');
       }
 
@@ -88,10 +87,11 @@ export class UserService {
         throw new Exception(ExceptionType.DATA_INVALID, "PASSWORDS DON'T MATCH");
       }
 
-      data.password = await bcrypt.hash(data.password, 10);
-      delete data.passwordConfirm;
+      dto.password = await bcrypt.hash(dto.password, 10);
+      delete dto.passwordConfirm;
     }
 
+    const data: Prisma.UserUpdateInput = { ...dto };
     const user = await this.userRepository.update(username, data);
 
     delete user.password;
