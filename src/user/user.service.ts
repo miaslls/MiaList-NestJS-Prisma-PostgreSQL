@@ -26,9 +26,6 @@ export class UserService {
     }
 
     if (dto.password.length < 8) throw new Exception(ExceptionType.DATA_INVALID, 'PASSWORD TOO SHORT');
-    if (dto.password !== dto.passwordConfirm) throw new Exception(ExceptionType.DATA_INVALID, "PASSWORDS DON'T MATCH");
-
-    delete dto.passwordConfirm;
 
     const data: Prisma.UserCreateInput = { ...dto };
 
@@ -83,12 +80,7 @@ export class UserService {
         throw new Exception(ExceptionType.DATA_INVALID, 'PASSWORD TOO SHORT');
       }
 
-      if (dto.password !== dto.passwordConfirm) {
-        throw new Exception(ExceptionType.DATA_INVALID, "PASSWORDS DON'T MATCH");
-      }
-
       dto.password = await bcrypt.hash(dto.password, 10);
-      delete dto.passwordConfirm;
     }
 
     const data: Prisma.UserUpdateInput = { ...dto };

@@ -9,8 +9,4 @@ export class UserDto {
   @ApiProperty({ description: 'password, min 8 char', example: 'jane1234' })
   @IsString()
   password: string;
-
-  @ApiProperty({ description: 'password confirmation', example: 'jane1234' })
-  @IsString()
-  passwordConfirm: string;
 }

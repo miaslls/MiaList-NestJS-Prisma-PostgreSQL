@@ -6,3 +6,4 @@
 ## USER
 
 - ✅ isAdmin -> role
+- ✅ remove confirmPassword
