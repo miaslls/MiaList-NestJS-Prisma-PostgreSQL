@@ -24,13 +24,20 @@ export class TagService {
     }
 
     const data: Prisma.TagUncheckedCreateInput = { ...dto, userId };
-    return await this.tagRepository.create(data);
+
+    const tag = await this.tagRepository.create(data);
+    delete tag.listIds;
+
+    return tag;
   }
 
   // 📌 READ
 
   async findAll(userId: string): Promise<Tag[]> {
-    return await this.tagRepository.findAll(userId);
+    const tags = await this.tagRepository.findAll(userId);
+    tags.forEach((tag) => delete tag.listIds);
+
+    return tags;
   }
 
   async findOne(id: string): Promise<Tag> {
@@ -41,6 +48,7 @@ export class TagService {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'TAG NOT FOUND');
     }
 
+    delete tag.listIds;
     return tag;
   }
 
@@ -55,13 +63,21 @@ export class TagService {
     }
 
     const data: Prisma.TagUpdateInput = { ...dto };
-    return await this.tagRepository.update(id, data);
+
+    const tag = await this.tagRepository.update(id, data);
+    delete tag.listIds;
+
+    return tag;
   }
 
   // 📌 DELETE
 
   async remove(id: string): Promise<Tag> {
     await this.findOne(id);
-    return await this.tagRepository.remove(id);
+
+    const tag = await this.tagRepository.remove(id);
+    delete tag.listIds;
+
+    return tag;
   }
 }
