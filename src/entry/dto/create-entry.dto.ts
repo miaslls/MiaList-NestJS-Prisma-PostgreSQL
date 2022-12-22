@@ -6,10 +6,6 @@ export class EntryDto {
   @IsString()
   text: string;
 
-  @ApiProperty({ description: 'starred entry?' })
-  @IsBoolean()
-  starred?: boolean;
-
   @ApiProperty({ description: 'completed entry?' })
   completed?: boolean;
 

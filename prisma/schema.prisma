@@ -67,7 +67,7 @@ model Entry {
   text      String
   createdAt DateTime @map("created_at")
 
-  starred   Boolean?  @default(false)
+  starred   Boolean   @default(false)
   completed Boolean?
   date      DateTime?
   amount    Float?
