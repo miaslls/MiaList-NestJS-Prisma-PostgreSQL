@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  id       String @id @default(uuid()) @map("_id")
   username String @unique
   password String
   role     String @default("user")
@@ -21,49 +21,47 @@ model User {
 }
 
 model Category {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  id   String @id @default(uuid()) @map("_id")
   name String
 
   lists  List[]
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id") @db.ObjectId
+  userId String @map("user_id")
 
   @@map("category")
 }
 
 model Tag {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  id   String @id @default(uuid()) @map("_id")
   name String
 
-  lists   List[]   @relation(fields: [listIds], references: [id])
-  listIds String[] @map("list_ids") @db.ObjectId
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String   @map("user_id") @db.ObjectId
+  lists  List[]
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
 
   @@map("tag")
 }
 
 model List {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(uuid()) @map("_id")
   title       String
   icon        String
   pinned      Boolean
   isChecklist Boolean  @map("is_checklist")
   createdAt   DateTime @map("created_at")
 
+  tags       Tag[]
   entries    Entry[]
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  categoryId String?   @map("category_id") @db.ObjectId
-  tags       Tag[]     @relation(fields: [tagIds], references: [id])
-  tagIds     String[]  @map("tag_ids") @db.ObjectId
+  categoryId String?   @map("category_id")
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String    @map("user_id") @db.ObjectId
+  userId     String    @map("user_id")
 
   @@map("list")
 }
 
 model Entry {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(uuid()) @map("_id")
   text      String
   createdAt DateTime @map("created_at")
 
@@ -74,7 +72,7 @@ model Entry {
   hyperlink String?
 
   List   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
-  listId String @map("list_id") @db.ObjectId
+  listId String @map("list_id")
 
   @@map("entry")
 }

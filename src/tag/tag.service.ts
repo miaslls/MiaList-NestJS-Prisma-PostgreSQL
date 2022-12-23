@@ -5,7 +5,6 @@ import { TagRepository } from './tag.repository';
 
 import { Exception } from 'src/utils/exceptions/Exception';
 import { ExceptionType } from 'src/utils/exceptions/exception.helper';
-import { validObjectId } from 'src/utils/validation/object-id';
 
 import { Tag } from './entities/tag.entity';
 import { TagDto } from './dto/create-tag.dto';
@@ -24,31 +23,21 @@ export class TagService {
     }
 
     const data: Prisma.TagUncheckedCreateInput = { ...dto, userId };
-
-    const tag = await this.tagRepository.create(data);
-    delete tag.listIds;
-
-    return tag;
+    return await this.tagRepository.create(data);
   }
 
   // 📌 READ
 
   async findAll(userId: string): Promise<Tag[]> {
-    const tags = await this.tagRepository.findAll(userId);
-    tags.forEach((tag) => delete tag.listIds);
-
-    return tags;
+    return await this.tagRepository.findAll(userId);
   }
 
   async findOne(id: string): Promise<Tag> {
-    if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
-
     const tag = await this.tagRepository.findOne(id);
     if (!tag) {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'TAG NOT FOUND');
     }
 
-    delete tag.listIds;
     return tag;
   }
 
@@ -63,21 +52,13 @@ export class TagService {
     }
 
     const data: Prisma.TagUpdateInput = { ...dto };
-
-    const tag = await this.tagRepository.update(id, data);
-    delete tag.listIds;
-
-    return tag;
+    return await this.tagRepository.update(id, data);
   }
 
   // 📌 DELETE
 
   async remove(id: string): Promise<Tag> {
     await this.findOne(id);
-
-    const tag = await this.tagRepository.remove(id);
-    delete tag.listIds;
-
-    return tag;
+    return await this.tagRepository.remove(id);
   }
 }

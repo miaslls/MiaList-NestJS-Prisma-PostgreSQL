@@ -21,6 +21,6 @@ export class ListDto {
   @ApiProperty({ description: 'category ID' })
   categoryId?: string;
 
-  @ApiProperty({ description: 'tag ID list' })
-  tagIds?: string[];
+  @ApiProperty({ description: 'tag IDs' })
+  tags?: string[];
 }

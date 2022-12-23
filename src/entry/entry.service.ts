@@ -5,7 +5,6 @@ import { EntryRepository } from './entry.repository';
 
 import { Exception } from 'src/utils/exceptions/Exception';
 import { ExceptionType } from 'src/utils/exceptions/exception.helper';
-import { validObjectId } from 'src/utils/validation/object-id';
 
 import { EntryDto } from './dto/create-entry.dto';
 import { PartialEntryDto } from './dto/update-entry.dto';
@@ -30,8 +29,6 @@ export class EntryService {
   // 📌 READ
 
   async findOne(id: string): Promise<Entry> {
-    if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
-
     const entry = await this.entryRepository.findOne(id);
     if (!entry) {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'ENTRY NOT FOUND');

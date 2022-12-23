@@ -5,7 +5,6 @@ import { ListRepository } from './list.repository';
 
 import { Exception } from 'src/utils/exceptions/Exception';
 import { ExceptionType } from 'src/utils/exceptions/exception.helper';
-import { validObjectId } from 'src/utils/validation/object-id';
 
 import { List } from './entities/list.entity';
 import { ListDto } from './dto/create-list.dto';
@@ -18,16 +17,6 @@ export class ListService {
   // 📌 CREATE
 
   async create(userId: string, dto: ListDto): Promise<List> {
-    if ('categoryId' in dto) {
-      if (!validObjectId(dto.categoryId)) {
-        throw new Exception(ExceptionType.DATA_INVALID, 'CATEGORY ID INVALID');
-      }
-    }
-
-    dto.tagIds.forEach((tagId) => {
-      if (!validObjectId(tagId)) throw new Exception(ExceptionType.DATA_INVALID, 'TAG ID INVALID');
-    });
-
     const duplicateName = await this.listRepository.findOneByTitle(userId, dto.title);
     if (duplicateName) {
       throw new Exception(ExceptionType.DATA_INVALID, 'DUPLICATE LIST');
@@ -37,7 +26,7 @@ export class ListService {
       ...dto,
       userId,
       createdAt: new Date(),
-      tags: { connect: dto.tagIds.map((tagId) => ({ id: tagId })) },
+      tags: { connect: dto.tags.map((tagId) => ({ id: tagId })) },
     };
 
     return await this.listRepository.create(data);
@@ -50,8 +39,6 @@ export class ListService {
   }
 
   async findOne(id: string): Promise<List> {
-    if (!validObjectId(id)) throw new Exception(ExceptionType.DATA_INVALID, 'ID INVALID');
-
     const list = await this.listRepository.findOne(id);
     if (!list) {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'LIST NOT FOUND');
@@ -65,18 +52,6 @@ export class ListService {
   async update(userId: string, id: string, dto: PartialListDto): Promise<List> {
     const list = await this.findOne(id);
 
-    if ('categoryId' in dto) {
-      if (!validObjectId(dto.categoryId)) {
-        throw new Exception(ExceptionType.DATA_INVALID, 'CATEGORY ID INVALID');
-      }
-    }
-
-    if ('tagIds' in dto) {
-      dto.tagIds.forEach((tagId) => {
-        if (!validObjectId(tagId)) throw new Exception(ExceptionType.DATA_INVALID, 'TAG ID INVALID');
-      });
-    }
-
     if ('title' in dto && dto.title !== list.title) {
       const duplicateTitle = await this.listRepository.findOneByTitle(userId, dto.title);
       if (duplicateTitle) {
@@ -84,12 +59,7 @@ export class ListService {
       }
     }
 
-    const data: Prisma.ListUpdateInput = { ...dto };
-
-    if ('tagIds' in dto) {
-      data.tags = { set: dto.tagIds.map((tagId) => ({ id: tagId })) };
-    }
-
+    const data: Prisma.ListUpdateInput = { ...dto, tags: { set: dto.tags.map((tagId) => ({ id: tagId })) } };
     return await this.listRepository.update(id, data);
   }
 

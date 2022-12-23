@@ -6,6 +6,5 @@ export class List {
   isChecklist: boolean;
   createdAt: Date;
   categoryId?: string;
-  tagIds: string[];
   userId: string;
 }
