@@ -12,18 +12,18 @@ import { User } from './entities/user.entity';
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  private readonly userSelect: {
-    id: true;
-    username: true;
-    password: true;
-    role: true;
+  private readonly userSelect = {
+    id: true,
+    username: true,
+    password: true,
+    role: true,
     _count: {
       select: {
-        categories: true;
-        tags: true;
-        lists: true;
-      };
-    };
+        categories: true,
+        tags: true,
+        lists: true,
+      },
+    },
   };
 
   async create(data: Prisma.UserCreateInput): Promise<User> {
