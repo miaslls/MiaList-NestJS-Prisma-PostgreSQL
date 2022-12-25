@@ -12,6 +12,19 @@ import { List } from './entities/list.entity';
 export class ListRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private readonly listSelect = {
+    user: true,
+    category: true,
+    tags: true,
+    entries: true,
+    _count: {
+      select: {
+        tags: true,
+        entries: true,
+      },
+    },
+  };
+
   async create(data: Prisma.ListUncheckedCreateInput): Promise<List> {
     try {
       return this.prisma.list.create({ data });
@@ -22,7 +35,10 @@ export class ListRepository {
 
   async findAll(userId: string): Promise<List[]> {
     try {
-      return this.prisma.list.findMany({ where: { userId } });
+      return this.prisma.list.findMany({
+        where: { userId },
+        include: this.listSelect,
+      });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
