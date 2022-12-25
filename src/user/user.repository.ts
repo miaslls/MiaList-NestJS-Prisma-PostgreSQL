@@ -12,6 +12,20 @@ import { User } from './entities/user.entity';
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private readonly userSelect: {
+    id: true;
+    username: true;
+    password: true;
+    role: true;
+    _count: {
+      select: {
+        categories: true;
+        tags: true;
+        lists: true;
+      };
+    };
+  };
+
   async create(data: Prisma.UserCreateInput): Promise<User> {
     try {
       return this.prisma.user.create({ data });
@@ -22,7 +36,10 @@ export class UserRepository {
 
   async findAll(): Promise<User[]> {
     try {
-      return this.prisma.user.findMany();
+      return this.prisma.user.findMany({
+        select: this.userSelect,
+        orderBy: { username: 'asc' },
+      });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
@@ -30,7 +47,10 @@ export class UserRepository {
 
   async findOne(username: string): Promise<User> {
     try {
-      return this.prisma.user.findUnique({ where: { username } });
+      return this.prisma.user.findUnique({
+        where: { username },
+        select: this.userSelect,
+      });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
