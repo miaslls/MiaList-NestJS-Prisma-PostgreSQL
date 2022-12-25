@@ -12,6 +12,21 @@ import { Category } from './entities/category.entity';
 export class CategoryRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private readonly categInclude = {
+    user: true,
+    lists: {
+      include: {
+        tags: true,
+        entries: true,
+      },
+    },
+    _count: {
+      select: {
+        lists: true,
+      },
+    },
+  };
+
   async create(data: Prisma.CategoryUncheckedCreateInput): Promise<Category> {
     try {
       return this.prisma.category.create({ data });
@@ -22,7 +37,11 @@ export class CategoryRepository {
 
   async findAll(userId: string): Promise<Category[]> {
     try {
-      return this.prisma.category.findMany({ where: { userId } });
+      return this.prisma.category.findMany({
+        where: { userId },
+        include: this.categInclude,
+        orderBy: { name: 'asc' },
+      });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
@@ -30,7 +49,10 @@ export class CategoryRepository {
 
   async findOne(id: string): Promise<Category> {
     try {
-      return this.prisma.category.findUnique({ where: { id } });
+      return this.prisma.category.findUnique({
+        where: { id },
+        include: this.categInclude,
+      });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
