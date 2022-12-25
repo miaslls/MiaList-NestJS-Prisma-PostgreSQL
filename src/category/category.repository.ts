@@ -12,7 +12,7 @@ import { Category } from './entities/category.entity';
 export class CategoryRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  private readonly categInclude = {
+  private readonly categSelect = {
     user: true,
     lists: {
       include: {
@@ -39,7 +39,7 @@ export class CategoryRepository {
     try {
       return this.prisma.category.findMany({
         where: { userId },
-        include: this.categInclude,
+        include: this.categSelect,
         orderBy: { name: 'asc' },
       });
     } catch {
@@ -51,7 +51,7 @@ export class CategoryRepository {
     try {
       return this.prisma.category.findUnique({
         where: { id },
-        include: this.categInclude,
+        include: this.categSelect,
       });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
