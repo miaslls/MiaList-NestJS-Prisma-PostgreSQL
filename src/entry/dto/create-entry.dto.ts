@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsMongoId, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class EntryDto {
   @ApiProperty({ description: 'entry text', example: 'buy groceries' })
@@ -19,6 +19,5 @@ export class EntryDto {
   hyperlink?: string;
 
   @ApiProperty({ description: 'list ID' })
-  @IsMongoId()
   listId: string;
 }
