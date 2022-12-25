@@ -12,6 +12,22 @@ import { Tag } from './entities/tag.entity';
 export class TagRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private readonly tagSelect = {
+    user: true,
+    lists: {
+      include: {
+        category: true,
+        tags: true,
+        entries: true,
+      },
+    },
+    _count: {
+      select: {
+        lists: true,
+      },
+    },
+  };
+
   async create(data: Prisma.TagUncheckedCreateInput): Promise<Tag> {
     try {
       return this.prisma.tag.create({ data });
@@ -22,7 +38,11 @@ export class TagRepository {
 
   async findAll(userId: string): Promise<Tag[]> {
     try {
-      return this.prisma.tag.findMany({ where: { userId } });
+      return this.prisma.tag.findMany({
+        where: { userId },
+        include: this.tagSelect,
+        orderBy: { name: 'asc' },
+      });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
@@ -30,7 +50,10 @@ export class TagRepository {
 
   async findOne(id: string): Promise<Tag> {
     try {
-      return this.prisma.tag.findUnique({ where: { id } });
+      return this.prisma.tag.findUnique({
+        where: { id },
+        include: this.tagSelect,
+      });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
