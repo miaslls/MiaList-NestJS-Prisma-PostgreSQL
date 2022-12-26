@@ -12,6 +12,14 @@ import { Entry } from './entities/entry.entity';
 export class EntryRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private readonly entrySelect = {
+    list: {
+      include: {
+        user: true,
+      },
+    },
+  };
+
   async create(data: Prisma.EntryUncheckedCreateInput): Promise<Entry> {
     try {
       return this.prisma.entry.create({ data });
@@ -22,7 +30,10 @@ export class EntryRepository {
 
   async findOne(id: string): Promise<Entry> {
     try {
-      return this.prisma.entry.findUnique({ where: { id } });
+      return this.prisma.entry.findUnique({
+        where: { id },
+        include: this.entrySelect,
+      });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
     }
