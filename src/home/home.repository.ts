@@ -10,10 +10,24 @@ import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 export class HomeRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private readonly listSelect = {
+    user: true,
+    category: true,
+    tags: true,
+    entries: true,
+    _count: {
+      select: {
+        tags: true,
+        entries: true,
+      },
+    },
+  };
+
   async findPinnedLists(userId: string): Promise<List[]> {
     try {
       return await this.prisma.list.findMany({
         where: { userId, pinned: true },
+        include: this.listSelect,
         orderBy: { title: 'asc' },
       });
     } catch {
@@ -25,6 +39,7 @@ export class HomeRepository {
     try {
       return await this.prisma.list.findMany({
         where: { userId, pinned: false },
+        include: this.listSelect,
         orderBy: { title: 'asc' },
       });
     } catch {
