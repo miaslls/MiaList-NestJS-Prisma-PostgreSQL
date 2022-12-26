@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsString, IsUUID } from 'class-validator';
 
 export class ListDto {
   @ApiProperty({ description: 'list title', example: 'groceries' })
@@ -19,8 +19,9 @@ export class ListDto {
   isChecklist: boolean;
 
   @ApiProperty({ description: 'category ID' })
+  @IsUUID()
   categoryId?: string;
 
   @ApiProperty({ description: 'tag IDs' })
-  tags?: string[];
+  tags: string[];
 }
