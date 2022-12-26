@@ -71,7 +71,7 @@ model Entry {
   amount    Float?
   hyperlink String?
 
-  List   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
+  list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
   listId String @map("list_id")
 
   @@map("entry")
