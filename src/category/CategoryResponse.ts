@@ -27,7 +27,10 @@ type MappedList = {
   pinned: boolean;
   isChecklist: boolean;
   createdAt: Date;
-  category: string;
+  category: {
+    id: string;
+    name: string;
+  };
   tags: MappedTag[];
   entries: MappedEntry[];
 };
@@ -44,10 +47,10 @@ export class CategoryResponse {
     this.name = name;
     this.user = user.username;
     this.listCount = _count.lists;
-    this.lists = lists.map((list) => this.mapList(list, name));
+    this.lists = lists.map((list) => this.mapList(list, id, name));
   }
 
-  private mapList(list: List & { tags: Tag[]; entries: Entry[] }, categName: string): MappedList {
+  private mapList(list: List & { tags: Tag[]; entries: Entry[] }, categId: string, categName: string): MappedList {
     return {
       id: list.id,
       title: list.title,
@@ -55,7 +58,7 @@ export class CategoryResponse {
       pinned: list.pinned,
       isChecklist: list.isChecklist,
       createdAt: list.createdAt,
-      category: categName,
+      category: { id: categId, name: categName },
       tags: list.tags.map((tag) => this.mapTag(tag)),
       entries: list.entries.map((entry) => this.mapEntry(entry)),
     };
