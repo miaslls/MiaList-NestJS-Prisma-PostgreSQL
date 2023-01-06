@@ -8,6 +8,7 @@ import { HandleException } from 'src/utils/exceptions/exception.helper';
 import { Category } from './entities/category.entity';
 import { CategoryDto } from './dto/create-category.dto';
 import { PartialCategoryDto } from './dto/update-category.dto';
+import { CategoryResponse } from './CategoryResponse';
 
 import { User } from 'src/user/entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
@@ -31,7 +32,7 @@ export class CategoryController {
 
   @Get()
   @ApiOperation({ summary: 'get all categories (logged user)' })
-  async findAll(@LoggedUser() loggedUser: User): Promise<Category[]> {
+  async findAll(@LoggedUser() loggedUser: User): Promise<CategoryResponse[]> {
     try {
       return await this.categoryService.findAll(loggedUser.id);
     } catch (err) {
@@ -41,7 +42,7 @@ export class CategoryController {
 
   @Get(':id')
   @ApiOperation({ summary: 'get category' })
-  async findOne(@Param('id') id: string): Promise<Category> {
+  async findOne(@Param('id') id: string): Promise<CategoryResponse> {
     try {
       return await this.categoryService.findOne(id);
     } catch (err) {

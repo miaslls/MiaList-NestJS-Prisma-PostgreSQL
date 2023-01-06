@@ -7,25 +7,11 @@ import { Exception } from 'src/utils/exceptions/Exception';
 import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 
 import { Category } from './entities/category.entity';
+import { CategoryDbResponse, categorySelect } from './CategoryDbResponse';
 
 @Injectable()
 export class CategoryRepository {
   constructor(private readonly prisma: PrismaService) {}
-
-  private readonly categSelect = {
-    user: true,
-    lists: {
-      include: {
-        tags: true,
-        entries: true,
-      },
-    },
-    _count: {
-      select: {
-        lists: true,
-      },
-    },
-  };
 
   async create(data: Prisma.CategoryUncheckedCreateInput): Promise<Category> {
     try {
@@ -35,11 +21,11 @@ export class CategoryRepository {
     }
   }
 
-  async findAll(userId: string): Promise<Category[]> {
+  async findAll(userId: string): Promise<CategoryDbResponse[]> {
     try {
       return this.prisma.category.findMany({
         where: { userId },
-        include: this.categSelect,
+        include: categorySelect,
         orderBy: { name: 'asc' },
       });
     } catch {
@@ -47,11 +33,11 @@ export class CategoryRepository {
     }
   }
 
-  async findOne(id: string): Promise<Category> {
+  async findOne(id: string): Promise<CategoryDbResponse> {
     try {
       return this.prisma.category.findUnique({
         where: { id },
-        include: this.categSelect,
+        include: categorySelect,
       });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);

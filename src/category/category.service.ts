@@ -9,6 +9,7 @@ import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 import { Category } from './entities/category.entity';
 import { CategoryDto } from './dto/create-category.dto';
 import { PartialCategoryDto } from './dto/update-category.dto';
+import { CategoryResponse } from './CategoryResponse';
 
 @Injectable()
 export class CategoryService {
@@ -28,17 +29,18 @@ export class CategoryService {
 
   // 📌 READ
 
-  async findAll(userId: string): Promise<Category[]> {
-    return await this.categoryRepository.findAll(userId);
+  async findAll(userId: string): Promise<CategoryResponse[]> {
+    const categories = await this.categoryRepository.findAll(userId);
+    return categories.map((category) => new CategoryResponse(category));
   }
 
-  async findOne(id: string): Promise<Category> {
+  async findOne(id: string): Promise<CategoryResponse> {
     const category = await this.categoryRepository.findOne(id);
     if (!category) {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'CATEGORY NOT FOUND');
     }
 
-    return category;
+    return new CategoryResponse(category);
   }
 
   // 📌 UPDATE

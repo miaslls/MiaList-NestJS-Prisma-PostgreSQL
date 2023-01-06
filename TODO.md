@@ -1,8 +1,8 @@
 # **TODO:**
 
-- ✅ on repositories, check data type for create/update
-- 🔳 select/count
 - 🔳 formatResponse
+- ✅ select/count
+- ✅ on repositories, check data type for create/update
 
 ## USER
 
