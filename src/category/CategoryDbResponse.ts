@@ -4,6 +4,7 @@ export const categorySelect = {
   user: true,
   lists: {
     include: {
+      category: true,
       tags: true,
       entries: true,
     },
