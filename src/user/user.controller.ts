@@ -9,6 +9,7 @@ import { User } from './entities/user.entity';
 import { UserDto } from './dto/create-user.dto';
 import { PartialUserDto } from './dto/update-user.dto';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
+import { UserResponse } from './UserResponse';
 
 @ApiTags('users')
 @Controller('user')
@@ -29,7 +30,7 @@ export class UserController {
   @ApiOperation({ summary: 'get all users' })
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
-  async findAll(@LoggedUser() loggedUser: User): Promise<User[]> {
+  async findAll(@LoggedUser() loggedUser: User): Promise<UserResponse[]> {
     try {
       return await this.userService.findAll(loggedUser.role);
     } catch (err) {
@@ -41,7 +42,7 @@ export class UserController {
   @ApiOperation({ summary: 'get user' })
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
-  async findOne(@LoggedUser() loggedUser: User, @Param('username') username: string): Promise<User> {
+  async findOne(@LoggedUser() loggedUser: User, @Param('username') username: string): Promise<UserResponse> {
     try {
       return await this.userService.findOne(loggedUser, username);
     } catch (err) {

@@ -10,6 +10,7 @@ import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 import { User } from './entities/user.entity';
 import { UserDto } from './dto/create-user.dto';
 import { PartialUserDto } from './dto/update-user.dto';
+import { UserResponse } from './UserResponse';
 
 @Injectable()
 export class UserService {
@@ -38,16 +39,15 @@ export class UserService {
 
   // 📌 READ
 
-  async findAll(role: string): Promise<User[]> {
+  async findAll(role: string): Promise<UserResponse[]> {
     if (role !== 'admin') throw new Exception(ExceptionType.FORBIDDEN);
 
     const users = await this.userRepository.findAll();
 
-    users.forEach((user) => delete user.password);
-    return users;
+    return users.map((user) => new UserResponse(user));
   }
 
-  async findOne(loggedUser: User, username: string): Promise<User> {
+  async findOne(loggedUser: User, username: string): Promise<UserResponse> {
     if (loggedUser.role !== 'admin' && loggedUser.username !== username) {
       throw new Exception(ExceptionType.FORBIDDEN);
     }
@@ -57,8 +57,7 @@ export class UserService {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'USER NOT FOUND');
     }
 
-    delete user.password;
-    return user;
+    return new UserResponse(user);
   }
 
   // 📌 UPDATE

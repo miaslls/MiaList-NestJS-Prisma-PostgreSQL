@@ -7,24 +7,11 @@ import { Exception } from 'src/utils/exceptions/Exception';
 import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 
 import { User } from './entities/user.entity';
+import { UserDbResponse, userSelect } from './UserDbResponse';
 
 @Injectable()
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
-
-  private readonly userSelect = {
-    id: true,
-    username: true,
-    password: true,
-    role: true,
-    _count: {
-      select: {
-        categories: true,
-        tags: true,
-        lists: true,
-      },
-    },
-  };
 
   async create(data: Prisma.UserCreateInput): Promise<User> {
     try {
@@ -34,10 +21,10 @@ export class UserRepository {
     }
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserDbResponse[]> {
     try {
       return this.prisma.user.findMany({
-        select: this.userSelect,
+        select: userSelect,
         orderBy: { username: 'asc' },
       });
     } catch {
@@ -45,11 +32,11 @@ export class UserRepository {
     }
   }
 
-  async findOne(username: string): Promise<User> {
+  async findOne(username: string): Promise<UserDbResponse> {
     try {
       return this.prisma.user.findUnique({
         where: { username },
-        select: this.userSelect,
+        select: userSelect,
       });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
