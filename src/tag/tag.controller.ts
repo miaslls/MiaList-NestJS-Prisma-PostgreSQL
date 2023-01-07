@@ -8,6 +8,7 @@ import { HandleException } from 'src/utils/exceptions/exception.helper';
 import { Tag } from './entities/tag.entity';
 import { TagDto } from './dto/create-tag.dto';
 import { PartialTagDto } from './dto/update-tag.dto';
+import { TagResponse } from './tagResponse';
 
 import { User } from 'src/user/entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
@@ -31,7 +32,7 @@ export class TagController {
 
   @Get()
   @ApiOperation({ summary: 'get all tags (logged user)' })
-  async findAll(@LoggedUser() loggedUser: User): Promise<Tag[]> {
+  async findAll(@LoggedUser() loggedUser: User): Promise<TagResponse[]> {
     try {
       return await this.tagService.findAll(loggedUser.id);
     } catch (err) {
@@ -41,7 +42,7 @@ export class TagController {
 
   @Get(':id')
   @ApiOperation({ summary: 'get tag' })
-  async findOne(@Param('id') id: string): Promise<Tag> {
+  async findOne(@Param('id') id: string): Promise<TagResponse> {
     try {
       return await this.tagService.findOne(id);
     } catch (err) {

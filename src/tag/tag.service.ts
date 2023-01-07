@@ -9,6 +9,7 @@ import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 import { Tag } from './entities/tag.entity';
 import { TagDto } from './dto/create-tag.dto';
 import { PartialTagDto } from './dto/update-tag.dto';
+import { TagResponse } from './tagResponse';
 
 @Injectable()
 export class TagService {
@@ -28,17 +29,19 @@ export class TagService {
 
   // 📌 READ
 
-  async findAll(userId: string): Promise<Tag[]> {
-    return await this.tagRepository.findAll(userId);
+  async findAll(userId: string): Promise<TagResponse[]> {
+    const tags = await this.tagRepository.findAll(userId);
+
+    return tags.map((tag) => new TagResponse(tag));
   }
 
-  async findOne(id: string): Promise<Tag> {
+  async findOne(id: string): Promise<TagResponse> {
     const tag = await this.tagRepository.findOne(id);
     if (!tag) {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'TAG NOT FOUND');
     }
 
-    return tag;
+    return new TagResponse(tag);
   }
 
   // 📌 UPDATE

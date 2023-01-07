@@ -7,26 +7,11 @@ import { Exception } from 'src/utils/exceptions/Exception';
 import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 
 import { Tag } from './entities/tag.entity';
+import { TagDbResponse, tagSelect } from './TagDbResponse';
 
 @Injectable()
 export class TagRepository {
   constructor(private readonly prisma: PrismaService) {}
-
-  private readonly tagSelect = {
-    user: true,
-    lists: {
-      include: {
-        category: true,
-        tags: true,
-        entries: true,
-      },
-    },
-    _count: {
-      select: {
-        lists: true,
-      },
-    },
-  };
 
   async create(data: Prisma.TagUncheckedCreateInput): Promise<Tag> {
     try {
@@ -36,11 +21,11 @@ export class TagRepository {
     }
   }
 
-  async findAll(userId: string): Promise<Tag[]> {
+  async findAll(userId: string): Promise<TagDbResponse[]> {
     try {
       return this.prisma.tag.findMany({
         where: { userId },
-        include: this.tagSelect,
+        include: tagSelect,
         orderBy: { name: 'asc' },
       });
     } catch {
@@ -48,11 +33,11 @@ export class TagRepository {
     }
   }
 
-  async findOne(id: string): Promise<Tag> {
+  async findOne(id: string): Promise<TagDbResponse> {
     try {
       return this.prisma.tag.findUnique({
         where: { id },
-        include: this.tagSelect,
+        include: tagSelect,
       });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);
