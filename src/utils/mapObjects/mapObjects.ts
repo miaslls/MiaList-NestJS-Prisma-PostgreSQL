@@ -22,14 +22,14 @@ export function mapList(list: List & { category: Category; tags: Tag[]; entries:
   };
 }
 
-function mapTag(tag: Tag): MappedTag {
+export function mapTag(tag: Tag): MappedTag {
   return {
     id: tag.id,
     name: tag.name,
   };
 }
 
-function mapEntry(entry: Entry): MappedEntry {
+export function mapEntry(entry: Entry): MappedEntry {
   return {
     id: entry.id,
     text: entry.text,
