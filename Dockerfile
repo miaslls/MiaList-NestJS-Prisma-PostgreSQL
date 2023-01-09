@@ -4,8 +4,9 @@ FROM node:18-alpine As development
 
 WORKDIR /usr/src/app
 
-COPY --chown=node:node package*.json ./
-COPY --chown=node:node prisma ./
+COPY --chown=node:node package.json ./
+COPY --chown=node:node yarn.lock ./
+COPY --chown=node:node prisma ./prisma/
 
 RUN yarn install
 
@@ -15,9 +16,11 @@ USER node
 FROM node:18-alpine As build
 
 WORKDIR /usr/src/app
+EXPOSE 8080
 
-COPY --chown=node:node package*.json ./
-COPY --chown=node:node prisma ./
+COPY --chown=node:node package.json ./
+COPY --chown=node:node yarn.lock ./
+COPY --chown=node:node prisma ./prisma/
 COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node . .
 
