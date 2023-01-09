@@ -3,9 +3,9 @@ import { Tag } from '@prisma/client';
 import { List } from '@prisma/client';
 import { Entry } from '@prisma/client';
 
-import { MappedEntry, MappedList, MappedTag } from './mappedObjectTypes';
+import { FormattedEntry, FormattedList, Formattedag } from './formattedObjectTypes';
 
-export function mapList(list: List & { category: Category; tags: Tag[]; entries: Entry[] }): MappedList {
+export function formatList(list: List & { category: Category; tags: Tag[]; entries: Entry[] }): FormattedList {
   return {
     id: list.id,
     title: list.title,
@@ -17,19 +17,19 @@ export function mapList(list: List & { category: Category; tags: Tag[]; entries:
       id: list.category.id,
       name: list.category.name,
     },
-    tags: list.tags.map((tag) => mapTag(tag)),
-    entries: list.entries.map((entry) => mapEntry(entry)),
+    tags: list.tags.map((tag) => formatTag(tag)),
+    entries: list.entries.map((entry) => formatEntry(entry)),
   };
 }
 
-export function mapTag(tag: Tag): MappedTag {
+export function formatTag(tag: Tag): Formattedag {
   return {
     id: tag.id,
     name: tag.name,
   };
 }
 
-export function mapEntry(entry: Entry): MappedEntry {
+export function formatEntry(entry: Entry): FormattedEntry {
   return {
     id: entry.id,
     text: entry.text,

@@ -1,4 +1,4 @@
-export type MappedEntry = {
+export type FormattedEntry = {
   id: string;
   text: string;
   createdAt: Date;
@@ -9,12 +9,12 @@ export type MappedEntry = {
   hyperlink?: string;
 };
 
-export type MappedTag = {
+export type Formattedag = {
   id: string;
   name: string;
 };
 
-export type MappedList = {
+export type FormattedList = {
   id: string;
   title: string;
   icon: string;
@@ -25,6 +25,6 @@ export type MappedList = {
     id: string;
     name: string;
   };
-  tags: MappedTag[];
-  entries: MappedEntry[];
+  tags: Formattedag[];
+  entries: FormattedEntry[];
 };
