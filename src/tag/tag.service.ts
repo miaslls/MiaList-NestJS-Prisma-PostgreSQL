@@ -9,7 +9,7 @@ import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 import { Tag } from './entities/tag.entity';
 import { TagDto } from './dto/create-tag.dto';
 import { PartialTagDto } from './dto/update-tag.dto';
-import { TagResponse } from './tagResponse';
+import { TagResponse } from './TagResponse';
 
 @Injectable()
 export class TagService {
