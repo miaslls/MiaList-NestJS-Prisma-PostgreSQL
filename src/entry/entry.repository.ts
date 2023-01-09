@@ -7,18 +7,11 @@ import { Exception } from 'src/utils/exceptions/Exception';
 import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 
 import { Entry } from './entities/entry.entity';
+import { EntryDbResponse, entrySelect } from './EntryDbResponse';
 
 @Injectable()
 export class EntryRepository {
   constructor(private readonly prisma: PrismaService) {}
-
-  private readonly entrySelect = {
-    list: {
-      include: {
-        user: true,
-      },
-    },
-  };
 
   async create(data: Prisma.EntryUncheckedCreateInput): Promise<Entry> {
     try {
@@ -28,11 +21,11 @@ export class EntryRepository {
     }
   }
 
-  async findOne(id: string): Promise<Entry> {
+  async findOne(id: string): Promise<EntryDbResponse> {
     try {
       return this.prisma.entry.findUnique({
         where: { id },
-        include: this.entrySelect,
+        include: entrySelect,
       });
     } catch {
       throw new Exception(ExceptionType.INTERNAL_SERVER_ERROR);

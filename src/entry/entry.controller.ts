@@ -8,6 +8,7 @@ import { HandleException } from 'src/utils/exceptions/exception.helper';
 import { Entry } from './entities/entry.entity';
 import { EntryDto } from './dto/create-entry.dto';
 import { PartialEntryDto } from './dto/update-entry.dto';
+import { EntryResponse } from './EntryResponse';
 
 @ApiTags('entries')
 @UseGuards(AuthGuard())
@@ -28,7 +29,7 @@ export class EntryController {
 
   @Get(':id')
   @ApiOperation({ summary: 'get entry' })
-  async findOne(@Param('id') id: string): Promise<Entry> {
+  async findOne(@Param('id') id: string): Promise<EntryResponse> {
     try {
       return await this.entryService.findOne(id);
     } catch (err) {

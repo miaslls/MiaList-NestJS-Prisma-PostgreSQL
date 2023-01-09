@@ -9,6 +9,7 @@ import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 import { EntryDto } from './dto/create-entry.dto';
 import { PartialEntryDto } from './dto/update-entry.dto';
 import { Entry } from './entities/entry.entity';
+import { EntryResponse } from './EntryResponse';
 
 @Injectable()
 export class EntryService {
@@ -28,13 +29,13 @@ export class EntryService {
 
   // 📌 READ
 
-  async findOne(id: string): Promise<Entry> {
+  async findOne(id: string): Promise<EntryResponse> {
     const entry = await this.entryRepository.findOne(id);
     if (!entry) {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'ENTRY NOT FOUND');
     }
 
-    return entry;
+    return new EntryResponse(entry);
   }
 
   // 📌 UPDATE
