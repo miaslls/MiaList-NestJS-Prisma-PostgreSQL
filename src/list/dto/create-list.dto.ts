@@ -19,7 +19,6 @@ export class ListDto {
   isChecklist: boolean;
 
   @ApiProperty({ description: 'category ID' })
-  @IsUUID()
   categoryId?: string;
 
   @ApiProperty({ description: 'tag IDs' })
