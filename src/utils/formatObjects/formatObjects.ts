@@ -3,7 +3,7 @@ import { Tag } from '@prisma/client';
 import { List } from '@prisma/client';
 import { Entry } from '@prisma/client';
 
-import { FormattedEntry, FormattedList, Formattedag } from './formattedObjectTypes';
+import { FormattedEntry, FormattedList, FormattedTag } from './formattedObjectTypes';
 
 export function formatList(list: List & { category: Category; tags: Tag[]; entries: Entry[] }): FormattedList {
   return {
@@ -22,7 +22,7 @@ export function formatList(list: List & { category: Category; tags: Tag[]; entri
   };
 }
 
-export function formatTag(tag: Tag): Formattedag {
+export function formatTag(tag: Tag): FormattedTag {
   return {
     id: tag.id,
     name: tag.name,

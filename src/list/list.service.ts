@@ -9,6 +9,7 @@ import { ExceptionType } from 'src/utils/exceptions/exception.helper';
 import { List } from './entities/list.entity';
 import { ListDto } from './dto/create-list.dto';
 import { PartialListDto } from './dto/update-list.dto';
+import { ListResponse } from './ListResponse';
 
 @Injectable()
 export class ListService {
@@ -34,17 +35,19 @@ export class ListService {
 
   // 📌 READ
 
-  async findAll(userId: string): Promise<List[]> {
-    return await this.listRepository.findAll(userId);
+  async findAll(userId: string): Promise<ListResponse[]> {
+    const lists = await this.listRepository.findAll(userId);
+
+    return lists.map((list) => new ListResponse(list));
   }
 
-  async findOne(id: string): Promise<List> {
+  async findOne(id: string): Promise<ListResponse> {
     const list = await this.listRepository.findOne(id);
     if (!list) {
       throw new Exception(ExceptionType.RESOURCE_NOT_FOUND, 'LIST NOT FOUND');
     }
 
-    return list;
+    return new ListResponse(list);
   }
 
   // 📌 UPDATE

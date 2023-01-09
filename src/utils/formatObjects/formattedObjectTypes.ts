@@ -9,7 +9,7 @@ export type FormattedEntry = {
   hyperlink?: string;
 };
 
-export type Formattedag = {
+export type FormattedTag = {
   id: string;
   name: string;
 };
@@ -21,10 +21,7 @@ export type FormattedList = {
   pinned: boolean;
   isChecklist: boolean;
   createdAt: Date;
-  category: {
-    id: string;
-    name: string;
-  };
-  tags: Formattedag[];
+  category: { id: string; name: string };
+  tags: FormattedTag[];
   entries: FormattedEntry[];
 };

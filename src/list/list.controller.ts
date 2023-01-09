@@ -8,6 +8,7 @@ import { HandleException } from 'src/utils/exceptions/exception.helper';
 import { List } from './entities/list.entity';
 import { ListDto } from './dto/create-list.dto';
 import { PartialListDto } from './dto/update-list.dto';
+import { ListResponse } from './ListResponse';
 
 import { User } from 'src/user/entities/user.entity';
 import { LoggedUser } from 'src/auth/logged-user.decorator';
@@ -31,7 +32,7 @@ export class ListController {
 
   @Get()
   @ApiOperation({ summary: 'get all lists (logged user)' })
-  async findAll(@LoggedUser() loggedUser: User): Promise<List[]> {
+  async findAll(@LoggedUser() loggedUser: User): Promise<ListResponse[]> {
     try {
       return await this.listService.findAll(loggedUser.id);
     } catch (err) {
@@ -41,7 +42,7 @@ export class ListController {
 
   @Get(':id')
   @ApiOperation({ summary: 'get list' })
-  async findOne(@Param('id') id: string): Promise<List> {
+  async findOne(@Param('id') id: string): Promise<ListResponse> {
     try {
       return await this.listService.findOne(id);
     } catch (err) {
